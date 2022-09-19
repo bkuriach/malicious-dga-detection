@@ -134,7 +134,7 @@ def initDGA(salt):
     day, month, year = getDate()
     seed = int(generateSeed(year, month, day))
     seed = generateString(salt, seed)  # .decode("hex")
-    for i in range(100):
+    for i in range(100000):
         hashit = hasher(seed)
         # domain = generateDomain(hashit.decode("hex"), 0x0A)
         domain = generateDomain(hashit, 0x0A)
