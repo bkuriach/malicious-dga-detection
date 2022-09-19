@@ -1,4 +1,3 @@
-__author__ = 'andrewa'
 import datetime
 import random
 
@@ -217,5 +216,5 @@ def generate_domain():
     return domain
 
 
-for i in xrange(0, 100000):
-    print generate_domain()
+for i in range(0, 10):
+    print (generate_domain())
