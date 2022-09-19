@@ -25,7 +25,7 @@ def rc4crypt(data, key):
 
 def hasher(data, algorithm="md5"):
     h = hashlib.new(algorithm)
-    h.update(data)
+    h.update(data.encode())
     return h.hexdigest()
 
 
