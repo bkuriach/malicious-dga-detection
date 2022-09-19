@@ -1,0 +1,2 @@
+# malicious-dga-detection
+Attackers use domain generation algorithms (DGA) to generate huge amounts of domains. These domains are then used to perform various malicious attacks including (but not limited to) C2 servers in malware attack, phishing domains, tech support scam websites. The domains are generated using various algorithms (phish kits) to evade detection from security software.  In this hackathon project, we would like to create a working machine learning based classifier which will detect domains generated using DGAs. This can protect users from being compromised.
