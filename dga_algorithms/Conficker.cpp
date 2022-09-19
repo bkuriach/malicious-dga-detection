@@ -9,7 +9,7 @@ _log plog = log;
 
 __int64 mykey = 0;
 double dbl = 6.26454564e-1;
-char *tld_list[] = { ".cc", ".cn", ".ws", ".com", ".net", ".org", ".info", ".biz" };
+const char *tld_list[8] = { ".cc", ".cn", ".ws", ".com", ".net", ".org", ".info", ".biz" };
 
 void seed_prng()
 {
@@ -242,7 +242,7 @@ void print_domains(char * datestr)
 			pop eax
 	};
 
-	int max = 100000;
+	int max = 10;
 	FILE *fp;
 	if ((fp = fopen("conficker.txt", "at")) == NULL) {
 		exit(1);
