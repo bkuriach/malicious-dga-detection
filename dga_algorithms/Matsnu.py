@@ -217,4 +217,8 @@ def generate_domain():
 
 
 for i in range(0, 10):
-    print (generate_domain())
+    domain = generate_domain()
+    import wordsegment
+    from wordsegment import load, segment
+    load()
+    print(segment(domain))
