@@ -31,36 +31,37 @@ def seeder(index, salt):
     eax = edi
     edx = eax % ecx
     eax = eax / ecx
-    print "eax : %x edx : %x salt : %x" % (eax, edx, salt)
+    print((eax, edx, salt))
+    # print("eax : %x edx : %x salt : %x" % (eax, edx, salt))
     day, month, year = getDate()
     h = hashlib.new("md5")
     dx = ("%08x" % socket.htonl(edx)).decode("hex")
-    print "\tedx : " + dx.encode("hex")
+    print("\tedx : " + dx.encode("hex"))
     h.update(dx)
     y = ("%x" % socket.htons(year)).decode("hex")
-    print "\tyear : " + y.encode("hex")
+    print("\tyear : " + y.encode("hex"))
     h.update(y)
     s = ("%08x" % socket.htonl(salt)).decode("hex")
-    print "\tsalt : " + s.encode("hex")
+    print("\tsalt : " + s.encode("hex"))
     h.update(s)
     m = ("%04x" % socket.htons(month)).decode("hex")
-    print "\tmonth : " + m.encode("hex")
+    print("\tmonth : " + m.encode("hex"))
     h.update(m)
-    print "\tsalt : " + s.encode("hex")
+    print("\tsalt : " + s.encode("hex"))
     h.update(s)
     #d = ("%x" % socket.htons(day)).decode("hex")
     #print "\tday : " + d.encode("hex")
     #h.update(d)
-    print "\tsalt : " + s.encode("hex")
+    print("\tsalt : " + s.encode("hex"))
     h.update(s)
     seed = h.hexdigest()
     return seed, edx
 
 
 def generateDomain(hashlet):
-    print "Generating domain"
+    print("Generating domain")
     result = []
-    print "Hashlet : %x" % hashlet
+    print ("Hashlet : %x" % hashlet)
     ecx = hashlet
     cl = 0
     dl = 0
@@ -95,14 +96,14 @@ def generateDomain(hashlet):
 
     esi = len(result)
     eax = esi
-    print "result : %s, esi : %x cl %x" % ( ''.join(result), esi, cl)
+    print("result : %s, esi : %x cl %x" % ( ''.join(result), esi, cl))
     result[esi - 1] = chr(cl)
     eax = eax - edi
     esi -= 1
     while edi < esi:
         cl = result[edi]
         dl = result[esi]
-        print "\tesi: %x edi : %x cl : %s dl : %s result  :%s" % (esi, edi, cl, dl, ''.join(result))
+        print("\tesi: %x edi : %x cl : %s dl : %s result  :%s" % (esi, edi, cl, dl, ''.join(result)))
         result[esi] = cl
         esi -= 1
         result[edi] = dl
@@ -113,21 +114,22 @@ def generateDomain(hashlet):
 def engine(salt=0x35190501, maxiter=100000):
     domains = []
     #salt = 0x35190501
-    #maxiter = 1000
+    maxiter = 1000
     for i in range(maxiter):
+        print(salt)
         hashit, edx = seeder(i, salt)
-        print "hashit : " + hashit
+        print("hashit : " + hashit)
         hashstash = [int(hashit[:8], 16), int(hashit[8:16], 16), int(hashit[16:24], 16), int(hashit[24:], 16)]
         domain = ''
         if True:
             #while len(domain) < 0x10 :
             index = 0
             for hashlet in hashstash:
-                print "Hashlet : %x" % hashlet
+                print("Hashlet : %x" % hashlet)
                 domain += generateDomain(socket.htonl(hashlet) & 0xFFFFFFFF)
-                print "\t[%d] Domain : %s" % (index, domain)
+                print("\t[%d] Domain : %s" % (index, domain))
                 index += 1
-        print "[%d] Domain : %s\n" % (i, domain)
+        print("[%d] Domain : %s\n" % (i, domain))
 
         if (edx & 3 == 0):
             domain += ".\x63\x6F\x6D"
@@ -150,6 +152,6 @@ fp = open("../zeus.txt", "w")
 for domain in domains:
     a = "%s\n" % (domain)
     fp.write(a)
-    print a
+    print(a)
     index += 1
 fp.close()

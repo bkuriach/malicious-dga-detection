@@ -45,7 +45,7 @@ def generateSeed(a1, a2, a3):
     v6 = 0
     v7 = 0
     v8 = "1F1C1F1E1F1E1F1F1E1F1E1F"
-    v8 = v8.decode("hex")
+    # v8 = v8.decode("hex")
     result = 0
     if (a1 > 0):
         if ((a2 - 1) <= 0xB):
@@ -74,7 +74,7 @@ def generateSeed(a1, a2, a3):
 def generateString(salt, seed):
     buf = ''
     tmp = "%08x" % seed
-    tmp = tmp.decode("hex")
+    # tmp = tmp.decode("hex")
     for i in range(4):
         buf = tmp[i] + buf
     return buf
@@ -132,11 +132,12 @@ def generateDomain(mdhash, length):
 def initDGA(salt):
     domains = []
     day, month, year = getDate()
-    seed = generateSeed(year, month, day)
+    seed = int(generateSeed(year, month, day))
     seed = generateString(salt, seed)  # .decode("hex")
-    for i in range(100000):
+    for i in range(100):
         hashit = hasher(seed)
-        domain = generateDomain(hashit.decode("hex"), 0x0A)
+        # domain = generateDomain(hashit.decode("hex"), 0x0A)
+        domain = generateDomain(hashit, 0x0A)
         seed = ("%08x" % (int(hashit[:8], 16) + 0x01000000))
         domains.append(domain)
         # time.sleep(1)
@@ -146,5 +147,5 @@ def initDGA(salt):
 domains = initDGA(0)
 index = 0
 for domain in domains:
-    print domain[:8] + ".ru"
+    print(domain[:8] + ".ru")
     index += 1

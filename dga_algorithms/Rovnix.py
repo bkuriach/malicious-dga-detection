@@ -2,8 +2,8 @@ import random
 
 import datetime
 
-usdeclar = open("../help/usdeclar.txt", 'r').read().strip().split()
-for i in xrange(0, len(usdeclar)):
+usdeclar = open("help/usdeclar.txt", 'r').read().strip().split()
+for i in range(0, len(usdeclar)):
     usdeclar[i] = ''.join(e for e in usdeclar[i] if e.isalnum())
 
 
@@ -23,7 +23,7 @@ def generateSeed(a1, a2, a3):
     v6 = 0
     v7 = 0
     v8 = "1F1C1F1E1F1E1F1F1E1F1E1F"
-    v8 = v8.decode("hex")
+    # v8 = v8.decode("hex")
     result = 0
     if (a1 > 0):
         if ((a2 - 1) <= 0xB):
@@ -50,7 +50,7 @@ def generateSeed(a1, a2, a3):
 
 
 day, month, year = getDate()
-seed = generateSeed(year, month, day)
+seed = int(generateSeed(year, month, day))
 next_domain = 1
 const1 = 0xDEAD
 const2 = 0xBEEF
@@ -60,7 +60,9 @@ def generate_domain():
     domain = ''
     while len(domain) < 20:
         domain += choose_word()
+    domain = domain.replace(",",".")
     domain += '.com'
+
     return domain.lower()
 
 
@@ -69,6 +71,7 @@ def choose_word():
     global next_domain
     global const1
     global const2
+    seed = int(seed)
     time = random.randint(1, 10000)
     seed = (((((((((((seed & 0xFFFF) * const1) & 0xFFFF) * time) & 0xFFFF) * const2) & 0xFFFF) * next_domain) &
               0xFFFF) ^ const1) & 0xFFFF)
@@ -76,5 +79,5 @@ def choose_word():
     return usdeclar[rem]
 
 
-for i in xrange(0, 100000):
-    print generate_domain()
+for i in range(0, 100):
+    print(generate_domain())
