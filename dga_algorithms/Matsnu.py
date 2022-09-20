@@ -215,10 +215,18 @@ def generate_domain():
     domain += '.com'
     return domain
 
-
-for i in range(0, 10):
+#import wordsegment
+#from wordsegment import load, segment
+fp = open("matsnu.txt", "w")
+for i in range(0, 100000):
+#<<<<<<< Updated upstream
     domain = generate_domain()
-    import wordsegment
-    from wordsegment import load, segment
-    load()
-    print(segment(domain))
+    
+ #   load()
+ #   print(segment(domain))
+#=======
+#    d = generate_domain()
+    #print (domain)
+    fp.write(domain + '\n')
+fp.close()
+#>>>>>>> Stashed changes
