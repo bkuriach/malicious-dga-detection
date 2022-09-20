@@ -62,7 +62,6 @@ def generate_domain():
         domain += choose_word()
     domain = domain.replace(",",".")
     domain += '.com'
-
     return domain.lower()
 
 
