@@ -21,3 +21,4 @@ dependencies:
   - lightgbm
   - tensorflow
   - tensorflow-hub
+  - joblib
