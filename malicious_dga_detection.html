@@ -1,0 +1,107 @@
+<!-- Click on window -> type run and hit enter -> in the command window copy:
+cd C:\Program Files\Google\Chrome\Application
+chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security 
+-->
+<!-- https://stackoverflow.com/questions/27987910/azure-machine-learning-cors/52111270 -->
+
+<!doctype html>
+<html>
+   <head>
+      <script>
+          
+         const userAction = async () => {
+            var api_key = ''
+            var url;
+            url = String(document.getElementById("urlSearch").value);
+            const response = await fetch('http://104.45.181.146:80/api/v1/service/elmo-service/score', {
+               method: 'POST',
+               body: url, // string or object
+               headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization':('Bearer '+ api_key)
+               }
+            });
+            // document.getElementById("domain").value = url
+             const myJson = await response.json(); //extract JSON from the http response
+             result = JSON.parse(myJson)
+            //  document.getElementById("clean_probability").value = result[1]
+            //  document.getElementById("dga_probability").value = result[0]
+             value = Number(result[1])
+             if (value  < 0.6){
+               document.getElementById("verdict").value = "DGA"
+               document.getElementById("confidence").value = String(Math.floor((1-value) * 100)) + '%'
+             }
+             else{
+               document.getElementById("verdict").value = "CLEAN"
+               document.getElementById("confidence").value = String(Math.floor((value) * 100)) + '%'
+             }
+             
+         }
+         window.isActionableGroupMember = "False" === "True";
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "69v7ku79ul");
+
+      </script>
+   </head>
+   <body style="background-color:#efebebe7;">
+      
+      
+  
+      <center><br><br><h1 style="font-weight: bold;color:rgb(43, 43, 121)">Malicious DGA Detection</h1> </center>
+      <a href ="https://hackbox.microsoft.com/project/220">Project Details</a> 
+      <br>  
+      <br>
+      <text style="font-weight: bold;">Attackers use domain generation algorithms (DGA) to generate huge amounts of domains. 
+         These domains are then used to perform various malicious attacks including (but not limited to) 
+         C2 servers in malware attack, phishing domains, tech support scam websites. The domains are 
+         generated using various algorithms (phish kits) to evade detection from security software. 
+         In this hackathon project, we would like to create a working machine learning based classifier which 
+         will detect domains generated using DGAs. This can protect users from being compromised.
+      </text>
+      <br><br><br>
+   
+
+       
+      
+      <!-- <input type="text" name="Name" size="20">  -->
+      
+      <div class="ms-TextField ms-TextField--borderless searchField root-42">
+         <div class="ms-TextField-wrapper">
+            <div class="ms-TextField-fieldGroup fieldGroup-43">
+               <center>
+                  <!-- <text style="font-weight: bold;"> Enter URL </text> -->
+                  <input type="text" size="40" id="urlSearch" placeholder="Enter a URL to analyze" class="ms-TextField-field field-44" aria-invalid="false" value="">
+                  <!-- <input type="image" class="searchbtn" src="bing.jpg"></input> -->
+                  <button onclick="userAction()">Check DGA</button>   <br> <br>
+                 
+                  <text style="font-weight: bold;color:rgb(43, 43, 121)"> Verdict: </text><input id="verdict"> &nbsp;&nbsp;
+                  <text style="font-weight: bold;color:rgb(43, 43, 121)"> Confidence: </text><input id="confidence"><br><br>
+
+                   <!-- <text style="font-weight: bold;color:rgb(43, 43, 121)"> Clean: </text><input id="clean_probability"><br> <br>
+                  <text style="font-weight: bold;color:rgb(43, 43, 121)"> DGA: </text><input id="dga_probability"><br><br> -->
+
+                  <!-- <text style="font-weight: bold;color:rgb(43, 43, 121);"> URL: </text><input style="border: none" id="domain"><br><br> -->
+               </center>
+            </div>
+         </div>
+      </div> 
+
+      
+      <center><br><br><h2 style="font-weight: bold;color:rgb(43, 43, 121)">Work Details</h2> </center>
+
+      <p align ='center'>
+         <img src="images/system_architecture.png" alt="Smiley face" style="float:center;width:700px;height:350px;">
+         <img src="images/model_call.png" alt="Smiley face" style="float:center;width:350px;height:350px;">
+         
+      </p>
+
+      <!-- <p align ='center'><img src="model_architecture_draw_1.png" alt="Smiley face" style="float:center;width:300px;height:250px;">
+         <img src="system_design.png" alt="Smiley face" style="float:center;width:350px;height:250px;">
+      </p> -->
+      
+
+	   </body>
+</html>
