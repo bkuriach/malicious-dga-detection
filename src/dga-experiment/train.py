@@ -68,10 +68,8 @@ def run_train():
     clean_domains_df = run.input_datasets['clean_domains'].to_pandas_dataframe()[['domain', 'class']]
 
     domain_df = pd.concat([malicious_dga_df,clean_domains_df])
-    domain_df = domain_df.sample(frac=0.01)
-    domain_df.to_csv('sample_df.csv')
-    run.upload_file(name = "outputs/domain_df.csv", path_or_stream = "sample_df.csv")
-
+    domain_df = domain_df.sample(frac=1)
+ 
     print(malicious_dga_df.shape, malicious_dga_df.head())
     print(clean_domains_df.shape, clean_domains_df.head())
     print(domain_df.head())
@@ -91,11 +89,8 @@ def run_train():
         K.set_session(session)
         session.run(tf.global_variables_initializer())
         session.run(tf.tables_initializer())
-        history = model_elmo.fit(list_stentences_train, y_binary , epochs=1, batch_size =2048, validation_split = 0.2)
-        model_elmo.save_weights('outputs/model_elmo_weights.h5')
-        model_elmo.save('outputs/elmo_model.h5')
-        # model_elmo.save('outputs/my_model')
-
+        history = model_elmo.fit(list_stentences_train, y_binary , epochs=5, batch_size =1024, validation_split = 0.2)
+        
         # serialize model to JSON
         model_json = model_elmo.to_json()
         with open("outputs/model.json", "w") as json_file:
@@ -107,89 +102,11 @@ def run_train():
     run.upload_file(name = "outputs/model.json", path_or_stream = "outputs/model.json")
     run.upload_file(name = "outputs/model.h5", path_or_stream = "outputs/model.h5")
 
-    # with tf.Session() as session:
-    #     K.set_session(session)
-    #     session.run(tf.global_variables_initializer())
-    #     session.run(tf.tables_initializer())
-    #     print("predictions", model_elmo.predict(list_stentences_train[0:100]))
-
-    # joblib.dump(value=model_elmo, filename="outputs/"+ "elmo_model1.h5")
-    joblib.dump(value=domain_df, filename="sample_df.csv")
-
-    # run.upload_file(name = "outputs/"+"elmo_model.pkl", path_or_stream = "outputs/elmo_model.pkl")
-
-    run.upload_file(name = "outputs/model_elmo_weights.h5", path_or_stream = "outputs/model_elmo_weights.h5")
-    run.upload_file(name = "outputs/elmo_model.h5", path_or_stream = "outputs/elmo_model.h5")
-
-    # run.upload_file(name = "outputs/elmo_model1.h5", path_or_stream = "outputs/elmo_model1.h5")
-    # run.upload_file(name = "outputs/my_model", path_or_stream = "outputs/my_model")
-
-
-    run.complete()
-    run.register_model(model_path="outputs/model_elmo_weights.h5", model_name='elmo_model_weights',
-                    tags={'Training context':'Inline Training'})
-    run.register_model(model_path="outputs/elmo_model.h5", model_name='elmo_model',
-    tags={'Training context':'Inline Training'})
-
-    # run.register_model(model_path="outputs/my_model", model_name='my_model',
-    # tags={'Training context':'Inline Training'})
-
-
-    # Download the model from run history
-    # run.download_file(name='outputs/elmo_model.h5', output_file_path='outputs/elmo_model.h5')
-    # run.download_file(name="outputs/elmo_model.h5",output_file_path=".")
-
-
-
-    # import pickle
-    # with open('elmo.pkl','w') as f:
-    #     pickle.dumps(model_elmo)
-
-    # service_name = 'elmo-service'
-    # from azureml.core import Workspace
-
-    # subscription_id = "4c7cb17d-ccf9-4af5-964f-b453c96bbd72"
-    # resource_group = "aml-resources-bk"
-    # workspace_name = "aml-workspace-bk"
-    # ws = Workspace(subscription_id = subscription_id, resource_group = resource_group, workspace_name = workspace_name)
-
-    # from azureml.core import Model
-    # service = Model.deploy(ws, service_name, [model_elmo], overwrite=True)
-    # service.wait_for_deployment(show_output=True)
-
-
-    # # load json and create model
-    # json_file = open('outputs/model.json', 'r')
-    # loaded_model_json = json_file.read()
-    # json_file.close()
-    # loaded_model = keras.models.model_from_json(loaded_model_json)
-    # # load weights into new model
-    # loaded_model.load_weights("outputs/model.h5")
-    # print("Loaded model from disk")
     
-    # # evaluate loaded model on test data
-    # loaded_model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-    # score = loaded_model.evaluate(X, Y, verbose=0)
-    # print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
-
-    with tf.Session() as session:
-        K.set_session(session)
-        session.run(tf.global_variables_initializer())
-        session.run(tf.tables_initializer())
-        json_file = open('outputs/model.json', 'r')
-        loaded_model_json = json_file.read()
-        json_file.close()
-        loaded_model = keras.models.model_from_json(loaded_model_json)
-        # load weights into new model
-        loaded_model.load_weights("outputs/model.h5")
-        print("Loaded model from disk")
-        
-        # evaluate loaded model on test data
-        loaded_model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-        # print("predictions", loaded_model.predict(list_stentences_train[0:100]))
-
+    run.complete()
+    
     run.register_model(model_path="outputs/model.h5", model_name='elmo-model-weights.h5',
-                    tags={'Training context':'Inline Training'})
+                tags={'Training context':'Inline Training'})
     run.register_model(model_path="outputs/model.json", model_name='elmo-model.json',
     tags={'Training context':'Inline Training'})
 
