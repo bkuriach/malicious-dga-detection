@@ -80,6 +80,8 @@ def run_train():
     y_binary = to_categorical(y_binary)
     print(y_binary)
 
+    X_train, X_test, y_train, y_test = train_test_split(list_stentences_train, y_binary, test_size = 0.2)
+
     model_elmo = build_model()
 
 
@@ -89,8 +91,11 @@ def run_train():
         K.set_session(session)
         session.run(tf.global_variables_initializer())
         session.run(tf.tables_initializer())
-        history = model_elmo.fit(list_stentences_train, y_binary , epochs=5, batch_size =1024, validation_split = 0.2)
-        
+        history = model_elmo.fit(X_train, y_train , epochs=4, batch_size =2048, validation_split = 0.2)
+        score = model_elmo.evaluate(X_test, y_test, verbose = 1) 
+        print('Test loss:', score[0]) 
+        print('Test accuracy:', score[1])
+
         # serialize model to JSON
         model_json = model_elmo.to_json()
         with open("outputs/model.json", "w") as json_file:

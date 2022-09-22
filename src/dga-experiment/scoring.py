@@ -32,9 +32,9 @@ from train import embed, build_model
 # Called when the service is loaded
 def init():
     global loaded_model
-    model_path_json = Model.get_model_path('elmo-model.json')
+    model_path_json = Model.get_model_path(model_name='elmo-model.json',version=7)
     print("model_path_json", model_path_json)
-    model_path_weights = Model.get_model_path('elmo-model-weights.h5')
+    model_path_weights = Model.get_model_path(model_name='elmo-model-weights.h5',version=7)
     print("model_path_weights", model_path_weights)
     # AZUREML_MODEL_DIR is an environment variable created during deployment.
     # It is the path to the model folder (./azureml-models/$MODEL_NAME/$VERSION)

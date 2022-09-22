@@ -29,8 +29,11 @@ def run_deploy():
     deploy_config = AksWebservice.deploy_configuration(cpu_cores=1, memory_gb=1)
                                                                 
     print('Deploying model...')
-    model_json = ws.models['elmo-model.json']
-    model_weights = ws.models['elmo-model-weights.h5']
+    # model_json = ws.models['elmo-model.json']
+    model_json = Model(ws,'elmo-model.json',version=7)
+    # model_weights = ws.models['elmo-model-weights.h5']
+    model_weights = Model(ws,'elmo-model-weights.h5',version=7)
+    # ws.models['elmo-model.json:8']
 
     service = Model.deploy(workspace=ws,
                         name = 'elmo-service',

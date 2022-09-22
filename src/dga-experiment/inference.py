@@ -15,12 +15,22 @@ allowSelfSignedHttps(True) # this line is needed if you use self-signed certific
 # depending on the format your endpoint expects.
 # More information can be found here:
 # https://docs.microsoft.com/azure/machine-learning/how-to-deploy-advanced-entry-script
-data = 'stackoverflow'
+data = 'sites.google.com'
+data = 'stackoverflow.com'
+data = 'zuugmhzwx.biz'
+data = 'sokgosiioakymime.org'
+# data = 'lsk8wo1196v3o1mwilk41t6fg2t.com'
+# data = 'havelegislaturesthethe.com'
 
 body = str.encode(json.dumps(data))
 
-url = ''
-api_key = '' # Replace this with the API key for the web service
+file1 = open('dga-experiment/keys.txt', 'r')
+Lines = file1.readlines()
+url = Lines[0].split(',')[1]
+api_key = Lines[1].split(',')[1]
+
+print(url)
+print(api_key)
 
 # The azureml-model-deployment header will force the request to go to a specific deployment.
 # Remove this header to have the request observe the endpoint traffic rules
@@ -32,7 +42,7 @@ try:
     response = urllib.request.urlopen(req)
 
     result = response.read()
-    print(result)
+    print("URL:", data," Probabilities (Clean, DGA)",result)
 except urllib.error.HTTPError as error:
     print("The request failed with status code: " + str(error.code))
 
